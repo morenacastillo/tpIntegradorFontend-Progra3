@@ -1,3 +1,10 @@
+:root {
+    --rosaPastel: #ecdbff;
+    --negro: black;
+    --blanco: white;
+    --colorFooter: #9C8F87;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -15,7 +22,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #ecdbff;
+    background-color: var(--rosaPastel);
     margin: 0;
     width: 100%;
 }
@@ -55,14 +62,14 @@ header {
 }
 
 nav {
-    background-color: #ecdbff;
+    background-color: var(--rosaPastel);
     justify-content: center;
     align-items: center;
     padding:15px 0;
 }
 
 .nav-a {
-    color: black;
+    color: var(--negro);
     margin-left: 15px;
     text-decoration: none;
 }
@@ -71,11 +78,9 @@ nav {
     margin-right: 50px;
 }
 
-
-
 footer {
-    background-color: #9C8F87;
-    color: white;
+    background-color: var(--colorFooter);
+    color: var(--blanco);
     text-align: center;
     padding: 2rem 0;
     position: relative;
