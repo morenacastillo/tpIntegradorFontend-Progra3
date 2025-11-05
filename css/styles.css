@@ -78,6 +78,16 @@ nav {
     margin-right: 50px;
 }
 
+.main-div {
+    display: flex;
+}
+
+.contenido-div{
+    justify-content: center;
+    align-items: center;
+}
+
+
 footer {
     background-color: var(--colorFooter);
     color: var(--blanco);
