@@ -4,19 +4,19 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="css/stylesAdmin.css">
         <link rel="icon" type="image" href="img/favicon/cara-de-gato-sin-boca.png">
         <script defer src="js/index.js"></script>
         <title>Duque's Music</title>
     </head>
 
-    <main>
+    <body>
 
         <header>
             
             <div class="div-header-p-img">
                 <img class="header-img" src="img/favicon/cara-de-gato-feliz.png" alt="">
-                <p class="header-p">Duque's <span class="header-p-span">Music - Administrador </span></p>
+                <p class="header-p">Duque's <span class="header-p-span">Music</span> / Administrador</p>
             </div>
             
             <nav>    
@@ -29,27 +29,24 @@
                 </div>
             </nav>
 
-
-            
         </header>
 
         <main>
             <h1>Consultar producto por id</h1>
+            <hr>
             <br>
-
+            
             <form id="getProduct-form">
                 <label for="idProd">Id del producto</label>
                 <input type="number" name="idProd" id="IdProd" required>
 
-                <input type="submit" value="Consultar producto">
+                <input class="boton" type="submit" value="Consultar producto">
             </form>
-
+            
             <div id="lista-productos">
                 
             </div>
             
-            
-
         </main> 
 
         <script>
@@ -59,6 +56,7 @@
 
             getProduct_form.addEventListener("submit", async (event) => {
                 event.preventDefault();
+                
                 let formData = new FormData(event.target); //form data
                 
                 let data = Object.fromEntries(formData.entries()); //objeto
@@ -67,26 +65,27 @@
                 
                 try {
                     let repuesta = await fetch(`${url}/${idProd}`);
+                    
                     let datos = await repuesta.json();
 
                     let producto = datos.payload[0];
                     
-                    let htmlProducto = `
-                    <li class="li-listados">
-                        <img src="${producto.imagen}" alt="${producto.titulo}">
-                        <p>Id: ${producto.id} / Nombre: ${producto.titulo} / <strong>Precio: ${producto.precio}</strong></p>
-                    </li>
+                    let htmlProducto = 
+                    `
+                    <ul class="ul-admin">
+                        <li class="li-listados">
+                            <img src="${producto.imagen}" alt="${producto.titulo}">
+                            <p>Id: ${producto.id} | Nombre: ${producto.titulo} | Precio: $${producto.precio}</p>
+                        </li>
+                    </ul>
                     `;
 
                     listaProductos.innerHTML = htmlProducto;
-                    
-
+                
                 } catch (error) {
                     console.log(error); 
                 }
                 
-                
-
             })
 
         </script>

@@ -23,7 +23,9 @@ function mostrarProductos(productos){
         <div class="card-producto">
             <img src="${prod.imagen}" alt="${prod.titulo}">
             <h3>${prod.titulo}</h3>
-            <p>${prod.precio}</p>
+            <p>$${prod.precio}</p>
+            <p>${prod.tipo}</p>
+
         </div>
         `;
         contenedorProductos.innerHTML = htmlProductos;
