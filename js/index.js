@@ -7,8 +7,7 @@ async function obtenerProductos() {
         let respuesta = await fetch("http://localhost:3000/products");
         let respuestaFormato = await respuesta.json();
         let productos = await respuestaFormato.payload;
-    
-        console.table(productos)
+
 
         mostrarProductos(productos);
 
