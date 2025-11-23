@@ -60,11 +60,11 @@
                 let formData = new FormData(event.target); //form data
                 
                 let data = Object.fromEntries(formData.entries()); //objeto
-
+                                
                 let idProd = data.idProd;
-                
+                                
                 try {
-                    let respuesta = await fetch(`${url}/${idProd}`);
+                    let repuesta = await fetch(`${url}/${idProd}`);
                     
                     let datos = await repuesta.json();
 

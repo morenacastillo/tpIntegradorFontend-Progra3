@@ -32,16 +32,57 @@
 
             
         </header>
-
-        <body>
-        <h1>Lista de productos</h1>
-        <hr>
-        <div id="contenedor-productos">
+        <main>
             
-        </div>
-    </body>
+            <h1>Lista de productos</h1>
+            <hr>
+            <div id="contenedor-productos">
+                
+            </div>
+        
+        </main>
         <footer>
             <p>Duque's Music</p>
         </footer>
+        <script>
+            let contenedorProductos = document.getElementById("contenedor-productos")
+
+            async function obtenerProductos() {
+                try{
+                    let respuesta = await fetch("http://localhost:3000/products");
+                    let respuestaFormato = await respuesta.json();
+                    let productos = await respuestaFormato.payload;
+
+
+                    mostrarProductos(productos);
+
+                } catch (error) {
+                    
+                    }
+                }
+
+            function mostrarProductos(productos){
+                let htmlProductos = "";
+                productos.forEach(prod => {
+                    htmlProductos += `
+                    <div class="card-producto">
+                        <img src="${prod.imagen}" alt="${prod.titulo}">
+                        <h3>${prod.titulo}</h3>
+                        <p>$${prod.precio}</p>
+                        <p>${prod.tipo}</p>
+
+                    </div>
+                    `;
+                    contenedorProductos.innerHTML = htmlProductos;
+                });
+            }
+
+
+            function init() {
+                obtenerProductos();
+            }
+
+            init();
+        </script>
     </body>
 </html>

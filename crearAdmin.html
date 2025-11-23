@@ -43,7 +43,7 @@
                 <label for="tipoProd">Tipo</label>
                 <select name="tipo" id="tipoProd">
                     <option value="vinilos">Vinilos</option>
-                    <option value="cd's">Cd's</option>
+                    <option value="cds">Cd's</option>
                     <option value="cassette">Cassette</option>
                 </select>
                 
@@ -61,9 +61,13 @@
 
                 <input type="submit" value="Crear producto">
             </form>
+
+            <div id="contenedor-productos"></div>
+
         </main>
         
         <script>
+            let contenedorProductos = document.getElementById("contenedor-productos");
             let crearProductos = document.getElementById("crear-productos");
 
             let url = "http://localhost:3000/products";
@@ -77,7 +81,6 @@
                 
                 console.log(data);
                 
-                // Si se hace un fetch que no sea get se necesita agregar un segundo parametroa
                 try {
                     let respuesta = await fetch(url, { 
                     method: "POST",
@@ -86,6 +89,14 @@
                     },
                     body: JSON.stringify(data)
                 }); 
+
+                let resultado = await respuesta.json();
+                if (respuesta.ok) {
+                    alert(`Producto creado con exito con ID: ${resultado.productId}`)
+                } else {
+                    alert(`Error en la creacion de producto: ${resultado.message}`)
+                }
+
                 } catch(error) {
                     console.error("Error al enviar los datos: ", error);
                     alert("Error al procesar los datos")
