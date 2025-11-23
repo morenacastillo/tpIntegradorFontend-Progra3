@@ -5,11 +5,15 @@ async function obtenerProductos() {
     let url = "http://localhost:3000/products"
     try{
         let respuesta = await fetch("http://localhost:3000/products");
-        let respuestaFormato = await respuesta.json();
-        let productos = await respuestaFormato.payload;
+        let data = await respuesta.json();
 
+        if(respuesta.ok){
+            let productos = await data.payload;
+            mostrarProductos(productos);
 
-        mostrarProductos(productos);
+        } else {
+            alert("Error obteniendo productos")
+        }
 
     } catch (error) {
         

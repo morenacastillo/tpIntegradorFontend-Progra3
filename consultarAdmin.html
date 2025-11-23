@@ -64,29 +64,51 @@
                 let idProd = data.idProd;
                                 
                 try {
-                    let repuesta = await fetch(`${url}/${idProd}`);
+                    let respuesta = await fetch(`${url}/${idProd}`);
                     
-                    let datos = await repuesta.json();
+                    let datos = await respuesta.json();
 
-                    let producto = datos.payload[0];
-                    
-                    let htmlProducto = 
-                    `
-                    <ul class="ul-admin">
-                        <li class="li-listados">
-                            <img src="${producto.imagen}" alt="${producto.titulo}">
-                            <p>Id: ${producto.id} | Nombre: ${producto.titulo} | Precio: $${producto.precio}</p>
-                        </li>
-                    </ul>
-                    `;
+                    if(respuesta.ok) {
+                        let producto = datos.payload[0];
+                        
+                        mostrarProducto(producto);
 
-                    listaProductos.innerHTML = htmlProducto;
+                    } else {
+                        console.error(datos.message)
+                        mostrarError(datos.message)
+                    }
                 
                 } catch (error) {
                     console.log(error); 
                 }
                 
-            })
+            });
+
+            function mostrarProducto (producto){
+                let htmlProducto = 
+                        `
+                        <ul class="ul-admin">
+                            <li class="li-listados">
+                                <img src="${producto.imagen}" alt="${producto.titulo}">
+                                <p>Id: ${producto.id} | Nombre: ${producto.titulo} | Precio: $${producto.precio}</p>
+                            </li>
+                        </ul>
+                        `;
+    
+                listaProductos.innerHTML = htmlProducto;
+            }
+
+            function mostrarError(error){
+                let htmlError = `
+                <li class="mensaje-error">
+                    <p>
+                        <strong>Error:</strong>
+                        <span>${error}</span>
+                    </p>
+                </li>
+                `  
+                listaProductos.innerHTML = htmlError;
+            }
 
         </script>
     </body>
