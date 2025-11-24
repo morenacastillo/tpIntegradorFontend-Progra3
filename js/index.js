@@ -2,9 +2,9 @@
 let contenedorProductos = document.getElementById("contenedor-productos")
 
 async function obtenerProductos() {
-    let url = "http://localhost:3000/products"
+    let url = "http://localhost:3000/api/products"
     try{
-        let respuesta = await fetch("http://localhost:3000/products");
+        let respuesta = await fetch("http://localhost:3000/api/products");
         let data = await respuesta.json();
 
         if(respuesta.ok){
