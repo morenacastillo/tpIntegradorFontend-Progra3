@@ -160,6 +160,7 @@ body h1 {
     background-color: var(--colorProductos);
     border: 2px solid var(--colorBordeProductos);
     transition: 0.45s ease;
+    margin-bottom: 35px;
 }
 
 .card-producto:hover {
@@ -168,7 +169,7 @@ body h1 {
 }
 
 .card-producto img {
-    margin-top: 5px;
+    margin-top: 10px;
     width: 200px;
     width: 200px;
     object-fit: fill;

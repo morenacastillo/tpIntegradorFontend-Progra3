@@ -11,27 +11,23 @@
     </head>
 
     <body>
-        
-    
         <header>
-                
-                <div class="div-header-p-img">
-                    <img class="header-img" src="img/favicon/cara-de-gato-feliz.png" alt="">
-                    <p class="header-p">Duque's <span class="header-p-span">Music</span></p>
-                </div>
+            <div class="div-header-p-img">
+                <img class="header-img" src="img/favicon/cara-de-gato-feliz.png" alt="">
+                <p class="header-p">Duque's <span class="header-p-span">Music</span></p>
+            </div>
 
-                <div class="div-buscador">
-                    <input type="search" id="buscador-productos" placeholder="Buscar productos...">
+            <div class="div-buscador">
+                <input type="search" id="buscador-productos" placeholder="Buscar productos...">
+            </div>
+            
+            <nav>    
+                <div class="nav-div">
+                    <a class="nav-a" href="inicio.html">Inicio</a>
+                    <a class="nav-a" href="productos.html">Productos</a>
+                    <a class="nav-a" href="carrito.html">Carrito</a>
                 </div>
-                
-                <nav>    
-                    <div class="nav-div">
-                        <a class="nav-a" href="index.html">Inicio</a>
-                        <a class="nav-a" href="productos.html">Productos</a>
-                        <a class="nav-a" href="nosotros.html">Nosotros</a>
-                        <a class="nav-a" href="carrito.html">Carrito</a>
-                    </div>
-                </nav>
+            </nav>
         </header>
 
         <main>
@@ -41,5 +37,65 @@
                 
             </div>
         </main>
+        
+        <footer>
+            <p>Emiliano David Centurion - Morena Castillo</p>
+        </footer>
+        
+        <script>
+            let contenedorProductos = document.getElementById("contenedor-productos");
+
+            async function obtenerProductos() {
+                try {
+                    // Hacemos la peticion get a la url de nuestra api rest para obtener los productos
+                    // Ojo! Para evitar que la politica de seguridad CORS bloquee nuestra peticion fetch a esa url, necesitamos habilitar CORS desde nuestra API Rest
+                    let respuesta = await fetch("http://localhost:3000/api/products");
+                    console.log(respuesta);
+
+                    let data = await respuesta.json();
+                    console.log(data);
+
+                    if(respuesta.ok) {
+                        console.log(data.message);
+                        
+                        let productos = data.payload;
+        
+                        console.table(productos);
+        
+                        mostrarProductos(productos);
+
+                    } else {
+                        alert("Error obteniendo productos")
+                    }
+
+
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+
+            function mostrarProductos(productos) {
+                let htmlProductos = "";
+
+                productos.forEach(prod => {
+                    htmlProductos += `
+                        <div class="card-producto">
+                            <img src="${prod.imagen}" alt="${prod.titulo}">
+                            <h3>${prod.titulo}</h5>
+                            <p>$${prod.precio}</p>
+                        </div>
+                    `;
+
+                    contenedorProductos.innerHTML = htmlProductos;
+                })
+            }
+
+            function init() {
+                obtenerProductos();
+            }
+
+            init();
+        </script>
+
     </body>
 </html>
