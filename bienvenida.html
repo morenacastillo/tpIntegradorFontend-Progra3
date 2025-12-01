@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="icon" type="image" href="img/favicon/cara-de-gato-sin-boca.png">
+        <title>Duque's Music</title>
+    </head>
+
+    <body>
+
+        <header>
+            
+            <div class="div-header-p-img">
+                <img class="header-img" src="img/favicon/cara-de-gato-feliz.png" alt="">
+                <p class="header-p">Duque's <span class="header-p-span">Music</span></p>
+            </div>
+
+        </header>
+
+        <main class="main-bienvenida"> 
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <div class="main-div-bienvenida">
+                <div class="div-bienvenida-img">
+                    <img class="bienvenida-img" src="img/favicon/cara-de-gato-feliz.png" alt="">
+                </div>
+
+                <div class="contenido-div-bienvenida">
+                    <div class="div-h1-p-bienvenida">
+                        <h1>¡Te damos la bienvenida a Duque's Music!</h1>
+                        <br>
+                        <h3>Ingresá tu nombre para continuar</h3>
+
+                        <form id="form-bienvenida">
+                            <input type="text" id="bienvenida-nombre" placeholder="Tu nombre...">
+                            <input class="btn-enviar" type="submit" value="Entrar">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <script>
+            let formBienvenida = document.getElementById("form-bienvenida")
+            formBienvenida.addEventListener("submit", event => {
+                event.preventDefault()
+
+                let nombreUsuario = document.getElementById("bienvenida-nombre").value;
+                if(nombreUsuario.length > 0) {
+                    sessionStorage.setItem("nombreUsuario", nombreUsuario)
+                    window.location.href = "inicio.html"
+                }
+            })
+
+
+
+        </script>
+    </body>
+</html>

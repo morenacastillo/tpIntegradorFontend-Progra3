@@ -8,10 +8,9 @@
         <title>Duque's Music</title>
     </head>
 
+    
     <body>
-        
         <header>
-            
             <div class="div-header-p-img">
                 <img class="header-img" src="img/favicon/cara-de-gato-feliz.png" alt="">
                 <p class="header-p">Duque's <span class="header-p-span">Music</span></p>
@@ -26,32 +25,28 @@
             </nav>
         </header>    
 
+
         <main>
             <h1>Carrito</h1>
             <hr>
             <h3 id="contador-carrito">Carrito: 0 Productos</h3>
             <section id="contenedor-carrito"></section>
             <div id="notification-container"></div>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-
+            
         </main>
+
 
         <footer>
             <p>Emiliano David Centurion - Morena Castillo</p>
         </footer>
 
+
         <script>
+            let nombreUsuario = sessionStorage.getItem("nombreUsuario")
+            if(!nombreUsuario) {
+                window.location.href = "bienvenida.html"
+            }
+
             carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
 
             let htmlCarrito = ""
