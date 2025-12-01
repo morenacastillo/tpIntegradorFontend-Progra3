@@ -6,7 +6,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/styles.css">
         <link rel="icon" type="image" href="img/favicon/cara-de-gato-sin-boca.png">
-        <script defer src="js/index.js"></script>
         <title>Duque's Music</title>
     </head>
 
@@ -43,27 +42,20 @@
         </footer>
         
         <script>
-            let contenedorProductos = document.getElementById("contenedor-productos");
+            const contenedorProductos = document.getElementById("contenedor-productos");
+            const barraBusqueda = document.getElementById("buscador-productos")
+            const productos = []
+            
+            barraBusqueda.addEventListener("input", buscarProductos);
 
             async function obtenerProductos() {
                 try {
-                    // Hacemos la peticion get a la url de nuestra api rest para obtener los productos
-                    // Ojo! Para evitar que la politica de seguridad CORS bloquee nuestra peticion fetch a esa url, necesitamos habilitar CORS desde nuestra API Rest
                     let respuesta = await fetch("http://localhost:3000/api/products");
-                    console.log(respuesta);
-
                     let data = await respuesta.json();
-                    console.log(data);
-
                     if(respuesta.ok) {
-                        console.log(data.message);
-                        
-                        let productos = data.payload;
-        
-                        console.table(productos);
-        
+                        productos.length = 0;              
+                        productos.push(...data.payload);
                         mostrarProductos(productos);
-
                     } else {
                         alert("Error obteniendo productos")
                     }
@@ -76,7 +68,6 @@
 
             function mostrarProductos(productos) {
                 let htmlProductos = "";
-
                 productos.forEach(prod => {
                     htmlProductos += `
                         <div class="card-producto">
@@ -90,10 +81,26 @@
                 })
             }
 
+            function buscarProductos(){
+                let textoBusqueda = barraBusqueda.value.toLowerCase();
+                if (textoBusqueda === "") {
+                    mostrarProductos(productos);
+                    return;
+                }
+                const productosFiltrados = productos.filter(prod => {
+                    // defensivo: chequeamos que exista titulo
+                    return prod.titulo && prod.titulo.toLowerCase().includes(textoBusqueda);
+                });
+
+                mostrarProductos(productosFiltrados);
+                }
+
+
+            
+
             function init() {
                 obtenerProductos();
             }
-
             init();
         </script>
 
