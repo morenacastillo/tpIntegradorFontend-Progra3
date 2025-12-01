@@ -16,12 +16,12 @@
 /*------------ Body --------------*/
 
 body {
-    font-family: 'Poppins', sans-serif;
+    
     display: flex;
     flex-direction: column;
     font-size: 20px;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
 }
-
 /*------------ Header -------------*/
 
 header {
@@ -182,4 +182,190 @@ body h1 {
 
 .card-producto p {
     margin-top: 15px;
+}
+
+/*-------------- Carrito -------------*/
+
+.carrito-img {
+    width: 30%;
+    margin: auto 475px;
+}
+
+.boton-agregar {
+    background-color: var(--colorBordeProductos);
+    color: var(--blanco);
+    border: none;
+    padding: 10px 18px;
+    margin-top: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: 0.2s ease;
+}
+
+.boton-agregar:hover {
+    background-color: #b68bd8;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+.boton-agregar:active {
+    background-color: #9e72c7; 
+    transform: scale(0.96);
+}
+
+#contador-carrito {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+#contenedor-carrito {
+    width: 70%;
+    margin: 30px auto;
+}
+
+.bloque-item {
+    list-style: none;
+    background-color: var(--colorProductos);
+    border: 2px solid var(--colorBordeProductos);
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.35s ease;
+}
+
+.bloque-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+}
+
+.nombre-item {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.boton-eliminar {
+    background-color: var(--colorBordeProductos);
+    color: var(--blanco);
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s ease;
+}
+
+.boton-eliminar:hover {
+    background-color: #b68bd8;
+    transform: scale(1.05);
+}
+
+.carrito-footer {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: var(--colorProductos);
+    border: 2px solid var(--colorBordeProductos);
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.total-carrito {
+    font-size: 22px;
+    font-weight: 600;
+}
+
+#vaciar-carrito {
+    background-color: var(--negro);
+    color: var(--blanco);
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 17px;
+    transition: 0.3s ease;
+}
+
+#vaciar-carrito:hover {
+    background-color: #333;
+    transform: scale(1.05);
+}
+
+.carrito-vacio {
+    text-align: center;
+    margin-top: 40px;
+    font-style: italic;
+    font-size: 22px;
+}
+
+/*-------------- Ordenamiento -------------*/
+.contenedor-orden {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 50px 20px 0;
+    font-size: 18px;
+}
+.contenedor-orden label {
+    font-weight: 500;
+    color: var(--negro);
+}
+
+#select-ordenar {
+    padding: 6px 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 2px solid var(--colorBordeProductos); 
+    background-color: var(--colorProductos);
+    color: var(--negro);
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+#select-ordenar:hover {
+    background-color: #e6d6f7; 
+}
+
+#select-ordenar:focus {
+    outline: none;
+    border-color: #b68bd8; 
+    box-shadow: 0 0 8px rgba(182, 139, 216, 0.5);
+}
+
+
+/*-------------- Notificacion -------------*/
+#notification-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 9999;
+}
+
+.notification {
+    background-color: var(--rosaPastel);
+    color: var(--negro);
+    padding: 12px 18px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    font-weight: bold;
+    animation: fadeInOut 3s forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(20px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(20px); }
 }

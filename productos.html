@@ -1,108 +1,190 @@
 
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/styles.css">
-        <link rel="icon" type="image" href="img/favicon/cara-de-gato-sin-boca.png">
-        <title>Duque's Music</title>
-    </head>
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="stylesheet" href="css/styles.css">
+            <link rel="icon" type="image" href="img/favicon/cara-de-gato-sin-boca.png">
+            <title>Duque's Music</title>
+        </head>
 
-    <body>
-        <header>
-            <div class="div-header-p-img">
-                <img class="header-img" src="img/favicon/cara-de-gato-feliz.png" alt="">
-                <p class="header-p">Duque's <span class="header-p-span">Music</span></p>
-            </div>
-
-            <div class="div-buscador">
-                <input type="search" id="buscador-productos" placeholder="Buscar productos...">
-            </div>
-            
-            <nav>    
-                <div class="nav-div">
-                    <a class="nav-a" href="inicio.html">Inicio</a>
-                    <a class="nav-a" href="productos.html">Productos</a>
-                    <a class="nav-a" href="carrito.html">Carrito</a>
+        <body>
+            <header>
+                <div class="div-header-p-img">
+                    <img class="header-img" src="img/favicon/cara-de-gato-feliz.png" alt="">
+                    <p class="header-p">Duque's <span class="header-p-span">Music</span></p>
                 </div>
-            </nav>
-        </header>
 
-        <main>
-            <h1>Lista de productos</h1>
-            <hr>
-            <div id="contenedor-productos">
+                <div class="div-buscador">
+                    <input type="search" id="buscador-productos" placeholder="Buscar productos...">
+                </div>
                 
-            </div>
-        </main>
-        
-        <footer>
-            <p>Emiliano David Centurion - Morena Castillo</p>
-        </footer>
-        
-        <script>
-            const contenedorProductos = document.getElementById("contenedor-productos");
-            const barraBusqueda = document.getElementById("buscador-productos")
-            const productos = []
-            
-            barraBusqueda.addEventListener("input", buscarProductos);
+                <nav>    
+                    <div class="nav-div">
+                        <a class="nav-a" href="inicio.html">Inicio</a>
+                        <a class="nav-a" href="productos.html">Productos</a>
+                        <a class="nav-a" href="carrito.html">Carrito</a>
+                    </div>
+                </nav>
+            </header>
 
-            async function obtenerProductos() {
-                try {
-                    let respuesta = await fetch("http://localhost:3000/api/products");
-                    let data = await respuesta.json();
-                    if(respuesta.ok) {
-                        productos.length = 0;              
-                        productos.push(...data.payload);
+            <main>
+                <h1>Lista de productos</h1>
+                <hr>
+                <br>
+                <p>Aqui podrás encontrar todos nuestros productos disponibles</p>
+                <br>
+                <div class="contenedor-orden">
+                    <label for="select-ordenar">Ordenar por:</label>
+                        <select id="select-ordenar">
+                            <option value="precioAsc">Precio ↑</option>
+                            <option value="precioDesc">Precio ↓</option>
+                            <option value="alfAsc">Alfabético ↑</option>
+                            <option value="alfDesc">Alfabético ↓</option>
+                        </select>
+                </div>
+                <div id="contenedor-productos"></div>
+                <div id="notification-container"></div>
+
+
+            </main>
+            
+            <footer>
+                <p>Emiliano David Centurion - Morena Castillo</p>
+            </footer>
+            
+            <script>
+                const contenedorProductos = document.getElementById("contenedor-productos");
+                const barraBusqueda = document.getElementById("buscador-productos")
+                const productos = []
+                const selectOrdenar = document.getElementById("select-ordenar");
+
+                let carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
+                
+                barraBusqueda.addEventListener("input", buscarProductos);
+                selectOrdenar.addEventListener("change", ordenarProductos);
+
+
+                async function obtenerProductos() {
+                    try {
+                        let respuesta = await fetch("http://localhost:3000/api/products");
+                        let data = await respuesta.json();
+                        if(respuesta.ok) {
+                            productos.length = 0;              
+                            productos.push(...(data.payload || []));
+                            mostrarProductos(productos);
+                        } else {
+                            alert("Error obteniendo productos")
+                        }
+
+
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+
+                function mostrarProductos(productos) {
+                    let htmlProductos = "";
+                    productos.forEach(prod => {
+                        htmlProductos += `
+                            <div class="card-producto">
+                                <img src="${prod.imagen}" alt="${prod.titulo}">
+                                <h3>${prod.titulo}</h3>
+                                <h5>${prod.tipo}</h5>
+                                <p>$${prod.precio}</p>
+                                <button class="boton-agregar" onclick="agregarACarrito(${prod.id})">Agregar al carrito</button>
+                            </div>
+                        `;
+
+                        contenedorProductos.innerHTML = htmlProductos;
+                    })
+                }
+
+                function buscarProductos(){
+                    let textoBusqueda = barraBusqueda.value.toLowerCase();
+                    if (textoBusqueda === "") {
                         mostrarProductos(productos);
-                    } else {
-                        alert("Error obteniendo productos")
+                        return;
+                    }
+                    const productosFiltrados = productos.filter(prod => {
+                        // defensivo: chequeamos que exista titulo
+                        return prod.titulo && prod.titulo.toLowerCase().includes(textoBusqueda);
+                    });
+
+                    mostrarProductos(productosFiltrados);
                     }
 
+                function agregarACarrito(id){
+                    const productoEnCarrito = carrito.find(prod => prod.id === id);
+                    if(productoEnCarrito){
+                        productoEnCarrito.cantidad++;                   
+                        
+                    } else{
+                        const prod = productos.find(prod => prod.id === id);
+                        prod.cantidad = 1;
+                        carrito.push(prod);
+                    }
+                    sessionStorage.setItem("carrito", JSON.stringify(carrito));
+                    mostrarNotificacion("Producto agregado al carrito con exito");
 
-                } catch (error) {
-                    console.error(error);
-                }
-            }
-
-            function mostrarProductos(productos) {
-                let htmlProductos = "";
-                productos.forEach(prod => {
-                    htmlProductos += `
-                        <div class="card-producto">
-                            <img src="${prod.imagen}" alt="${prod.titulo}">
-                            <h3>${prod.titulo}</h5>
-                            <p>$${prod.precio}</p>
-                        </div>
-                    `;
-
-                    contenedorProductos.innerHTML = htmlProductos;
-                })
-            }
-
-            function buscarProductos(){
-                let textoBusqueda = barraBusqueda.value.toLowerCase();
-                if (textoBusqueda === "") {
-                    mostrarProductos(productos);
-                    return;
-                }
-                const productosFiltrados = productos.filter(prod => {
-                    // defensivo: chequeamos que exista titulo
-                    return prod.titulo && prod.titulo.toLowerCase().includes(textoBusqueda);
-                });
-
-                mostrarProductos(productosFiltrados);
+                    
                 }
 
+                function mostrarNotificacion(mensaje) {
+                    const contenedor = document.getElementById("notification-container");
 
-            
+                    if (!contenedor) {
+                        console.error("No existe el contenedor de notificaciones");
+                        return;
+                    }
 
-            function init() {
-                obtenerProductos();
-            }
-            init();
-        </script>
+                    const notificacion = document.createElement("div");
+                    notificacion.classList.add("notification");
+                    notificacion.textContent = mensaje;
 
-    </body>
-</html>
+                    contenedor.appendChild(notificacion);
+
+                    setTimeout(() => notificacion.remove(), 3000);
+                }
+                                            
+                function ordenarProductos(){
+                    let opcionSeleccionada = selectOrdenar.value;
+                    let productosOrdenados = [...productos];
+
+                    switch(opcionSeleccionada){
+                        case "precioAsc":
+                            productosOrdenados.sort( (a, b) => a.precio - b.precio );
+                            mostrarProductos(productosOrdenados);
+                            break;
+
+                        case "precioDesc":
+                            productosOrdenados.sort( (a, b) => b.precio - a.precio );
+                            mostrarProductos(productosOrdenados);
+                            break
+
+                        case "alfAsc":
+                            productosOrdenados.sort((a, b) => 
+                                (a.titulo.toLowerCase() > b.titulo.toLowerCase()) - 
+                                (a.titulo.toLowerCase() < b.titulo.toLowerCase()));
+                            mostrarProductos(productosOrdenados);
+                            break;
+                        
+                        case "alfDesc":
+                            productosOrdenados.sort((a, b) => 
+                                (b.titulo.toLowerCase() > a.titulo.toLowerCase()) - 
+                                (b.titulo.toLowerCase() < a.titulo.toLowerCase()));
+                            mostrarProductos(productosOrdenados);
+                            break;
+                            }
+                }
+
+                
+                function init() {
+                    obtenerProductos();
+                }
+                init();
+            </script>
+
+        </body>
+    </html>

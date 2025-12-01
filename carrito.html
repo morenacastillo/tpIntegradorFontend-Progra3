@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/styles.css">
         <link rel="icon" type="image" href="img/favicon/cara-de-gato-sin-boca.png">
-        <script defer src="js/index.js"></script>
         <title>Duque's Music</title>
     </head>
 
@@ -30,10 +29,115 @@
         <main>
             <h1>Carrito</h1>
             <hr>
+            <h3 id="contador-carrito">Carrito: 0 Productos</h3>
+            <section id="contenedor-carrito"></section>
+            <div id="notification-container"></div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+
         </main>
 
         <footer>
             <p>Emiliano David Centurion - Morena Castillo</p>
         </footer>
+
+        <script>
+            carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
+
+            let htmlCarrito = ""
+            const contenedorCarrito = document.getElementById("contenedor-carrito");
+
+            function mostrarCarrito() {
+                htmlCarrito = "<ul>";
+                let totalProductos = carrito.reduce((acum, prod) => acum + prod.cantidad, 0);
+
+                carrito.forEach((prod, indice) => {
+                    htmlCarrito += `
+                    <li class="bloque-item">
+                        <p class="nombre-item">${prod.titulo} - ${prod.tipo} - $${prod.precio}      x ${prod.cantidad}</p>
+                        <button class="boton-eliminar" onclick="eliminarDelCarrito(${indice})">Eliminar</button>
+                    `;
+                });
+
+                if(carrito.length >= 1){
+                    htmlCarrito += `
+                        </ul>
+                        <div class="carrito-footer">
+                            <button id="vaciar-carrito" onclick="vaciarCarrito()">Vaciar carrito</button>
+                            <p class="total-carrito">Total: $${carrito.reduce((acum, prod) => acum + (prod.precio * prod.cantidad), 0)}</p>
+                        </div> `;}
+                else{
+                    htmlCarrito += `
+                    <br>
+                    <br>
+                    </ul>
+                    <p class="carrito-vacio">El carrito se encuentra vacío...</p>
+                    <br>
+                    <img class="carrito-img" src="img/favicon/cara-de-gato-triste.png" alt="">`;
+                    
+                    }
+
+                contenedorCarrito.innerHTML = htmlCarrito;
+                document.getElementById("contador-carrito").textContent = `Carrito: ${totalProductos} productos`;
+
+                console.log(carrito);
+            }
+            
+            function eliminarDelCarrito(indice){
+                const prod = carrito[indice];
+                if(prod.cantidad > 1){
+                    prod.cantidad--;
+                } else{
+                    carrito.splice(indice, 1);
+                }
+                mostrarCarrito();
+                actualizarCarrito();
+                mostrarNotificacion("Producto eliminado del carrito con exito");
+
+            }
+            
+            function vaciarCarrito(){
+                carrito = []
+                mostrarCarrito()
+                actualizarCarrito()
+            }
+
+            function actualizarCarrito(){
+                sessionStorage.setItem("carrito", JSON.stringify(carrito));
+            }
+
+            function mostrarNotificacion(mensaje) {
+                    const contenedor = document.getElementById("notification-container");
+
+                    if (!contenedor) {
+                        console.error("No existe el contenedor de notificaciones");
+                        return;
+                    }
+
+                    const notificacion = document.createElement("div");
+                    notificacion.classList.add("notification");
+                    notificacion.textContent = mensaje;
+
+                    contenedor.appendChild(notificacion);
+
+                    setTimeout(() => notificacion.remove(), 3000);
+                }
+
+            function init(){
+                mostrarCarrito();
+            }
+
+            init()
+        </script>
     </body>
 </html>
