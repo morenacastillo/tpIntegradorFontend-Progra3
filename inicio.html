@@ -9,27 +9,6 @@
         <title>Duque's Music</title>
     </head>
 
-    <script defer>
-        const slider = document.querySelector(".slider");
-
-            slider.innerHTML += slider.innerHTML;
-
-            let desplazamiento = 0;
-
-            function moverCarrusel () {
-                desplazamiento += 2 // Velocidad
-
-                if (desplazamiento >= slider.scrollWidth / 2) {
-                    desplazamiento = 0;
-                }
-
-                slider.style.transform = `translateX(-${desplazamiento}px)`
-                requestAnimationFrame(moverCarrusel)
-            }
-
-            moverCarrusel();
-    </script>
-
     <body>
         <header>
             <div class="div-header-p-img">
@@ -99,7 +78,6 @@
             <p>Emiliano David Centurion - Morena Castillo</p>
         </footer>
 
-        
         <script>
             let nombreUsuario = sessionStorage.getItem("nombreUsuario")
             if(!nombreUsuario) {
