@@ -83,18 +83,18 @@
                         let respuesta = await fetch("http://localhost:3000/api/products");
                         let data = await respuesta.json();
                         if(respuesta.ok) {
-                            productos.length = 0;              
-                            productos.push(...(data.payload || []));
+                            productos.length = 0;
+                            const activos = (data.payload || []).filter(prod => prod.activo === 1)
+                            productos.push(...(activos));
                             mostrarProductos(productos);
                         } else {
                             alert("Error obteniendo productos")
                         }
-
-
                     } catch (error) {
                         console.error(error);
                     }
                 }
+
 
                 function mostrarProductos(productos) {
                     let htmlProductos = "";
@@ -108,10 +108,10 @@
                                 <button class="boton-agregar" onclick="agregarACarrito(${prod.id})">Agregar al carrito</button>
                             </div>
                         `;
-
                         contenedorProductos.innerHTML = htmlProductos;
                     })
                 }
+
 
                 function buscarProductos(){
                     let textoBusqueda = barraBusqueda.value.toLowerCase();
@@ -120,12 +120,10 @@
                         return;
                     }
                     const productosFiltrados = productos.filter(prod => {
-                        // defensivo: chequeamos que exista titulo
                         return prod.titulo && prod.titulo.toLowerCase().includes(textoBusqueda);
                     });
-
                     mostrarProductos(productosFiltrados);
-                    }
+                }
 
                 function agregarACarrito(id){
                     const productoEnCarrito = carrito.find(prod => prod.id === id);
@@ -139,9 +137,8 @@
                     }
                     sessionStorage.setItem("carrito", JSON.stringify(carrito));
                     mostrarNotificacion("Producto agregado al carrito con exito");
-
-                    
                 }
+
 
                 function mostrarNotificacion(mensaje) {
                     const contenedor = document.getElementById("notification-container");
@@ -159,7 +156,8 @@
 
                     setTimeout(() => notificacion.remove(), 3000);
                 }
-                                            
+                
+                
                 function ordenarProductos(){
                     let opcionSeleccionada = selectOrdenar.value;
                     let productosOrdenados = [...productos];
@@ -191,6 +189,7 @@
                             }
                 }
 
+                
                 function init() {
                     obtenerProductos();
                 }
