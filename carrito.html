@@ -3,6 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- CDN para usar jsPDF -->
+        <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
         <link rel="stylesheet" href="css/styles.css">
         <link rel="icon" type="image" href="img/favicon/cara-de-gato-sin-boca.png">
         <title>Duque's Music</title>
@@ -44,7 +46,8 @@
             <br>
             <br>
             <br>
-
+            
+            <button id="imprimir-ticket">Imprimir ticket</button>
         </main>
 
         <footer>
@@ -53,6 +56,8 @@
 
         <script>
             carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
+
+            const imprimirTicket = document.getElementById("imprimir-ticket")
 
             let htmlCarrito = ""
             const contenedorCarrito = document.getElementById("contenedor-carrito");
@@ -69,28 +74,36 @@
                     `;
                 });
 
-                if(carrito.length >= 1){
+                if (carrito.length >= 1) {
                     htmlCarrito += `
                         </ul>
                         <div class="carrito-footer">
                             <button id="vaciar-carrito" onclick="vaciarCarrito()">Vaciar carrito</button>
-                            <p class="total-carrito">Total: $${carrito.reduce((acum, prod) => acum + (prod.precio * prod.cantidad), 0)}</p>
-                        </div> `;}
-                else{
+                            <p class="total-carrito">
+                                Total: $${carrito.reduce((acum, prod) => acum + (prod.precio * prod.cantidad), 0)
+                                .toFixed(2)}
+                            </p>
+                        </div>`;
+                } else {
                     htmlCarrito += `
-                    <br>
-                    <br>
-                    </ul>
+                    <br><br></ul>
                     <p class="carrito-vacio">El carrito se encuentra vacío...</p>
                     <br>
                     <img class="carrito-img" src="img/favicon/cara-de-gato-triste.png" alt="">`;
-                    
-                    }
+                }
 
                 contenedorCarrito.innerHTML = htmlCarrito;
-                document.getElementById("contador-carrito").textContent = `Carrito: ${totalProductos} productos`;
 
-                console.log(carrito);
+                document.getElementById("contador-carrito").textContent =
+                `Carrito: ${totalProductos} productos`;
+
+                const botonImprimir = document.getElementById("imprimir-ticket");
+
+                if (carrito.length > 0) {
+                    botonImprimir.style.display = "block";
+                } else {
+                    botonImprimir.style.display = "none";
+                }
             }
             
             function eliminarDelCarrito(indice){
@@ -132,6 +145,92 @@
 
                     setTimeout(() => notificacion.remove(), 3000);
                 }
+            
+            // Imprimir tickets pdf
+
+            imprimirTicket.addEventListener("click", imprimirTicketCarrito)
+
+            function imprimirTicketCarrito() {
+                
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                let y = 10;
+
+                doc.setFont("Helvetica", "bold");
+                doc.setFontSize(18);
+                doc.text("Duque's Music", 10, y);
+
+                y += 7;
+
+                doc.setFontSize(12);
+                doc.setFont("Helvetica", "normal");
+                doc.text("Ticket de compra", 10, y);
+
+                y += 6;
+
+                const ahora = new Date()
+
+                const fecha = ahora.toLocaleDateString("es-AR");
+                const hora = ahora.toLocaleTimeString("es-AR", {hour: "2-digit", minute: "2-digit"})
+                doc.text(`Fecha: ${fecha}`, 10, y);
+                
+                y += 6;
+
+                doc.text(`Hora: ${hora}`, 10, y);
+
+                y += 5;
+
+                // Línea separadora
+                doc.line(10, y, 200, y);
+                
+                y += 10;
+
+                doc.setFont("Helvetica", "bold");
+                doc.text("Producto", 10, y);
+                doc.text("Tipo", 80, y)
+                doc.text("Cant.", 110, y);
+                doc.text("Precio", 150, y);
+
+                y += 6;
+
+                doc.line(10, y, 200, y); 
+                
+                y += 8;
+
+                doc.setFont("Helvetica", "normal");
+
+                carrito.forEach((prod) => {
+                    doc.text(prod.titulo.substring(0, 30), 10, y);
+                    doc.text(`${prod.tipo}`, 80, y);
+                    doc.text(String(prod.cantidad), 115, y);
+                    doc.text(`$${(prod.precio * prod.cantidad).toFixed(2)}`, 150, y);
+                    y += 8;
+                });
+
+                y += 4;
+
+                doc.line(10, y, 200, y);
+                
+                y += 10;
+
+                const precioTotal = carrito.reduce(
+                    (total, prod) => total + prod.precio * prod.cantidad, 
+                    0
+                ).toFixed(2);
+
+                doc.setFont("Helvetica", "bold");
+                doc.setFontSize(14);
+                doc.text(`TOTAL: $${precioTotal}`, 10, y);
+
+                y += 15;
+
+                doc.setFont("Helvetica", "normal");
+                doc.setFontSize(12);
+                doc.text("¡Gracias por tu compra!", 10, y);
+
+                doc.save("ticket.pdf");
+            }
 
             function init(){
                 mostrarCarrito();
