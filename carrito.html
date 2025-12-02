@@ -113,6 +113,60 @@
                 }
             }
             
+            async function resgistrarVenta(precioTotal, carrito) {
+                try {   
+
+                    const ahora = new Date()
+
+                    console.log(ahora);
+                    console.log(nombreUsuario);
+                    console.log(precioTotal);
+                    console.log(carrito);
+                    
+                    // Formato para DATE
+
+                    let fechaFormato = ahora.toISOString().slice(0, 19).replace("T", " ")
+
+                    const productosIDs = carrito.map(prod => prod.id);
+
+                    const data = {
+                        nombreUsuario: nombreUsuario,
+                        precioTotal: precioTotal,
+                        fechaEmision: fechaFormato,
+                        productos: productosIDs
+                    }
+
+                    console.log(data);
+
+                    const respuesta = await fetch("http://localhost:3000/api/sales", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    const resultado = await respuesta.json();
+
+                    if(respuesta.ok) {
+                        console.log("Venta exitosa: ", resultado);
+                        alert(resultado.message);
+                        
+                        sessionStorage.removeItem("nombreUsuario");
+                        sessionStorage.removeItem("carrito");
+                        
+                        window.location.href  = "bienvenida.html"
+                    } else {
+                        console.error(resultado);
+                        alert("Error en la venta")
+                    }
+                    
+                } catch (error) {
+                    console.error("Error al enviar los datos", error);
+                    alert("Error al registrar la venta")
+                }
+            };
+
             function eliminarDelCarrito(indice){
                 const prod = carrito[indice];
                 if(prod.cantidad > 1){
@@ -154,7 +208,16 @@
                 }
             
 
-            imprimirTicket.addEventListener("click", imprimirTicketCarrito)
+            imprimirTicket.addEventListener("click", () => {
+                const confirmar = confirm("¿Desea efectuar la compra?");
+
+                if (confirmar) {
+                    imprimirTicketCarrito();
+                } else {
+                    mostrarNotificacion("Compra cancelada. Puede seguir agregando productos al carrito")
+                }
+            });
+
             function imprimirTicketCarrito() {
                 
                 const { jsPDF } = window.jspdf;
@@ -235,6 +298,8 @@
                 doc.text("¡Gracias por tu compra!", 10, y);
 
                 doc.save("ticket.pdf");
+
+                resgistrarVenta(precioTotal, carrito)
             }
 
             function init(){
