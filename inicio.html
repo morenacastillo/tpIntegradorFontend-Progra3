@@ -22,11 +22,9 @@
                 if (desplazamiento >= slider.scrollWidth / 2) {
                     desplazamiento = 0;
                 }
-
                 slider.style.transform = `translateX(-${desplazamiento}px)`
                 requestAnimationFrame(moverCarrusel)
             }
-
             moverCarrusel();
     </script>
 
