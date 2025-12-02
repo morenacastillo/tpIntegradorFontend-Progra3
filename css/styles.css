@@ -384,7 +384,38 @@ body h1 {
     font-size: 22px;
 }
 
+#imprimir-ticket {
+    background-color: var(--colorBordeProductos);
+    color: var(--blanco);
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s ease;
+    margin: 0 auto 10px;
+}
+
+#imprimir-ticket:hover {
+    background-color: #b68bd8;
+    transform: scale(1.05);
+}
+
 /*-------------- Ordenamiento -------------*/
+
+.fila-superior {
+    display: flex;
+    justify-content: space-between; /* uno a la izquierda y el otro a la derecha */
+    align-items: center; /* centrados verticalmente */
+    margin-bottom: 20px;
+}
+
+.fila-superior p {
+    margin: 0;
+    font-size: 18px;
+    margin-left: 50px;
+}
+
 .contenedor-orden {
     display: flex;
     justify-content: flex-end;
