@@ -379,7 +379,6 @@ body h1 {
 .carrito-vacio {
     text-align: center;
     margin-top: 40px;
-    font-style: italic;
     font-size: 22px;
 }
 
@@ -435,7 +434,6 @@ body h1 {
     border: 2px solid var(--colorBordeProductos); 
     background-color: var(--colorProductos);
     color: var(--negro);
-    font-family: 'Poppins', sans-serif;
     cursor: pointer;
     transition: 0.25s ease;
 }

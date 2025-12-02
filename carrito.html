@@ -40,12 +40,6 @@
             <br>
             <br>
             <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
             
             <button id="imprimir-ticket">Imprimir ticket</button>
         </main>
@@ -223,7 +217,7 @@
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
 
-                let y = 10;
+                let y = 15;
 
                 doc.setFont("Helvetica", "bold");
                 doc.setFontSize(18);
@@ -247,7 +241,13 @@
 
                 doc.text(`Hora: ${hora}`, 10, y);
 
-                y += 5;
+                y += 6;
+
+                doc.setFontSize(12);
+                doc.setFont("Helvetica", "normal");
+                doc.text(`Usuario: ${nombreUsuario}`, 10, y);
+
+                y += 4;
 
                 // Línea separadora
                 doc.line(10, y, 200, y);
