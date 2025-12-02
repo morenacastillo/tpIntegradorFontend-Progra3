@@ -10,10 +10,9 @@
         <title>Duque's Music</title>
     </head>
 
+    
     <body>
-        
         <header>
-            
             <div class="div-header-p-img">
                 <img class="header-img" src="img/favicon/cara-de-gato-feliz.png" alt="">
                 <p class="header-p">Duque's <span class="header-p-span">Music</span></p>
@@ -27,6 +26,7 @@
                 </div>
             </nav>
         </header>    
+
 
         <main>
             <h1>Carrito</h1>
@@ -50,11 +50,18 @@
             <button id="imprimir-ticket">Imprimir ticket</button>
         </main>
 
+
         <footer>
             <p>Emiliano David Centurion - Morena Castillo</p>
         </footer>
 
+
         <script>
+            let nombreUsuario = sessionStorage.getItem("nombreUsuario")
+            if(!nombreUsuario) {
+                window.location.href = "bienvenida.html"
+            }
+
             carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
 
             const imprimirTicket = document.getElementById("imprimir-ticket")

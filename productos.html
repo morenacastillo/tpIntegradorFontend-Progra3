@@ -29,10 +29,12 @@
                 </nav>
             </header>
 
+
             <main>
                 <h1>Lista de productos</h1>
                 <hr>
                 <br>
+                <p><span id="nombre-usuario"></span>, aquí podrás encontrar todos nuestros productos disponibles...</p>
                 <br>
                 <div class="fila-superior">
                     <p>Aquí podrás encontrar todos nuestros productos disponibles</p>
@@ -50,15 +52,22 @@
                 
                 <div id="contenedor-productos"></div>
                 <div id="notification-container"></div>
-
-
             </main>
             
+
             <footer>
                 <p>Emiliano David Centurion - Morena Castillo</p>
             </footer>
             
+
             <script>
+                let nombreUsuario = sessionStorage.getItem("nombreUsuario")
+                if(!nombreUsuario) {
+                    window.location.href = "bienvenida.html"
+                }
+                document.getElementById("nombre-usuario").textContent = nombreUsuario;
+
+
                 const contenedorProductos = document.getElementById("contenedor-productos");
                 const barraBusqueda = document.getElementById("buscador-productos")
                 const productos = []
@@ -183,7 +192,6 @@
                             }
                 }
 
-                
                 function init() {
                     obtenerProductos();
                 }
